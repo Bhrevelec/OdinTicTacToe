@@ -1,5 +1,5 @@
 //gameboard IIFE
-const gameboard = (function () {
+const gameboard = function () {
   const board = [];
   for (let i = 0; i < 3; i++) {
     board[i] = [];
@@ -28,4 +28,33 @@ const gameboard = (function () {
   }
 
   return { showBoard, placeToken };
+};
+
+const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
+  const players = [
+    { name: player1, token: "X" },
+    { name: player2, token: "O" },
+  ];
+
+  const board = gameboard();
+
+  let activePlayer = players[0];
+
+  const changeActivePlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const printNewRound = () => {
+    console.log(`It's ${activePlayer.name}'s turn:`);
+    board.showBoard();
+  };
+
+  const playRound = (row, col) => {
+    board.placeToken(row, col, activePlayer.token);
+    changeActivePlayer();
+    printNewRound();
+  };
+  return { playRound, printNewRound };
 })();
+
+gameFlow.printNewRound();
