@@ -18,12 +18,56 @@ const gameboard = function () {
 
   const checkAvailability = (row, col) => {
     if (board[row][col].getValue() === 0) {
-      console.log("cell is available");
       return true;
     } else {
-      console.log("cell is not available");
       return false;
     }
+  };
+
+  const checkWin = () => {
+    if (
+      (board[0][0].getValue() === board[0][1].getValue() &&
+        board[0][0].getValue() === board[0][2].getValue() &&
+        board[0][1].getValue() === board[0][2].getValue() &&
+        board[0][0].getValue() !== 0) ||
+      (board[1][0].getValue() === board[1][1].getValue() &&
+        board[1][0].getValue() === board[1][2].getValue() &&
+        board[1][1].getValue() === board[1][2].getValue() &&
+        board[1][0].getValue() !== 0) ||
+      (board[2][0].getValue() === board[2][1].getValue() &&
+        board[2][0].getValue() === board[2][2].getValue() &&
+        board[2][1].getValue() === board[2][2].getValue() &&
+        board[2][0].getValue() !== 0)
+    ) {
+      return true;
+    } else if (
+      (board[0][0].getValue() === board[1][0].getValue() &&
+        board[0][0].getValue() === board[2][0].getValue() &&
+        board[1][0].getValue() === board[2][0].getValue() &&
+        board[0][0].getValue() !== 0) ||
+      (board[0][1].getValue() === board[1][1].getValue() &&
+        board[0][1].getValue() === board[2][1].getValue() &&
+        board[1][1].getValue() === board[2][1].getValue() &&
+        board[0][1].getValue() !== 0) ||
+      (board[0][2].getValue() === board[1][2].getValue() &&
+        board[0][2].getValue() === board[2][2].getValue() &&
+        board[1][2].getValue() === board[2][2].getValue() &&
+        board[0][2].getValue() !== 0)
+    ) {
+      return true;
+    } else if (
+      (board[0][0].getValue() === board[1][1].getValue() &&
+        board[0][0].getValue() === board[2][2].getValue() &&
+        board[1][1].getValue() === board[2][2].getValue() &&
+        board[0][0].getValue() !== 0) ||
+      (board[2][0].getValue() === board[1][1].getValue() &&
+        board[2][0].getValue() === board[0][2].getValue() &&
+        board[1][1].getValue() === board[0][2].getValue() &&
+        board[2][0].getValue() !== 0)
+    ) {
+      return true;
+    }
+    return false;
   };
 
   function cell() {
@@ -37,7 +81,7 @@ const gameboard = function () {
     return { setValue, getValue };
   }
 
-  return { showBoard, placeToken, checkAvailability };
+  return { showBoard, placeToken, checkAvailability, checkWin };
 };
 
 const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
@@ -62,6 +106,10 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
   const playRound = (row, col) => {
     if (board.checkAvailability(row, col)) {
       board.placeToken(row, col, activePlayer.token);
+      if (board.checkWin()) {
+        console.log(`${activePlayer.name} wins.`);
+        return;
+      }
       changeActivePlayer();
       printNewRound();
     } else {
