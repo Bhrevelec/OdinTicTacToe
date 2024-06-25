@@ -16,6 +16,16 @@ const gameboard = function () {
     board[row][col].setValue(val);
   };
 
+  const checkAvailability = (row, col) => {
+    if (board[row][col].getValue() === 0) {
+      console.log("cell is available");
+      return true;
+    } else {
+      console.log("cell is not available");
+      return false;
+    }
+  };
+
   function cell() {
     let value = 0;
     const setValue = (newValue) => {
@@ -27,7 +37,7 @@ const gameboard = function () {
     return { setValue, getValue };
   }
 
-  return { showBoard, placeToken };
+  return { showBoard, placeToken, checkAvailability };
 };
 
 const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
@@ -50,9 +60,14 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
   };
 
   const playRound = (row, col) => {
-    board.placeToken(row, col, activePlayer.token);
-    changeActivePlayer();
-    printNewRound();
+    if (board.checkAvailability(row, col)) {
+      board.placeToken(row, col, activePlayer.token);
+      changeActivePlayer();
+      printNewRound();
+    } else {
+      console.log("This position is already taken. Let's try again...");
+      printNewRound();
+    }
   };
   return { playRound, printNewRound };
 })();
