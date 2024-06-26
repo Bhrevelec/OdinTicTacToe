@@ -70,6 +70,23 @@ const gameboard = function () {
     return false;
   };
 
+  const checkDraw = () => {
+    if (
+      board[0][0].getValue() !== 0 &&
+      board[0][1].getValue() !== 0 &&
+      board[0][2].getValue() !== 0 &&
+      board[1][0].getValue() !== 0 &&
+      board[1][1].getValue() !== 0 &&
+      board[1][2].getValue() !== 0 &&
+      board[2][0].getValue() !== 0 &&
+      board[2][1].getValue() !== 0 &&
+      board[2][2].getValue() !== 0
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   function cell() {
     let value = 0;
     const setValue = (newValue) => {
@@ -81,7 +98,7 @@ const gameboard = function () {
     return { setValue, getValue };
   }
 
-  return { showBoard, placeToken, checkAvailability, checkWin };
+  return { showBoard, placeToken, checkAvailability, checkWin, checkDraw };
 };
 
 const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
