@@ -1,0 +1,37 @@
+.gameArea {
+  height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameboardContainer {
+  display: flex;
+  border: 2px solid #054e5a;
+  width: 360px;
+  height: 360px;
+  flex-wrap: wrap;
+}
+
+.gameboardPosition {
+  width: 120px;
+  height: 120px;
+  background-color: #ced9d7;
+  border: 2px solid #054e5a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: #054e5a;
+}
+
+.gameboardPosition:hover {
+  background-color: #e1b77e;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 50px;
+  color: #054e5a;
+  font-family: Tahoma;
+}
