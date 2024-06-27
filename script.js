@@ -8,6 +8,10 @@ const gameboard = function () {
     }
   }
 
+  const getBoard = () => {
+    return board;
+  };
+
   const showBoard = () => {
     console.log(board.map((row) => row.map((cell) => cell.getValue())));
   };
@@ -98,7 +102,14 @@ const gameboard = function () {
     return { setValue, getValue };
   }
 
-  return { showBoard, placeToken, checkAvailability, checkWin, checkDraw };
+  return {
+    getBoard,
+    showBoard,
+    placeToken,
+    checkAvailability,
+    checkWin,
+    checkDraw,
+  };
 };
 
 const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
@@ -109,7 +120,15 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
 
   const board = gameboard();
 
+  const getBoard = () => {
+    return board;
+  };
+
   let activePlayer = players[0];
+
+  const getActivePlayer = () => {
+    return activePlayer;
+  };
 
   const changeActivePlayer = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -126,6 +145,9 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
       if (board.checkWin()) {
         console.log(`${activePlayer.name} wins.`);
         return;
+      } else if (board.checkDraw()) {
+        console.log("It's a tie.");
+        return;
       }
       changeActivePlayer();
       printNewRound();
@@ -134,7 +156,26 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
       printNewRound();
     }
   };
-  return { playRound, printNewRound };
+  return { playRound, printNewRound, getActivePlayer };
 })();
 
 gameFlow.printNewRound();
+
+const screenController = (function () {
+  const buttons = document.querySelectorAll(".gameboardPosition");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      if (
+        gameFlow.playRound(
+          event.target.getAttribute("data-row"),
+          event.target.getAttribute("data-col")
+          //Active player is fout want ik update mijn scherm te laat.
+          //Mss logica omdraaien: vanuit gameController mijn UI functies aanroepen
+        )
+      ) {
+      }
+      event.target.textContent = gameFlow.getActivePlayer().token;
+    });
+  });
+})();
