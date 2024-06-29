@@ -35,3 +35,16 @@ h1 {
   color: #054e5a;
   font-family: Tahoma;
 }
+
+.resetButton {
+  padding: 10px;
+  background-color: #e1b77e;
+  border-radius: 5px;
+  position: absolute;
+  top: 6%;
+  left: 3%;
+}
+
+.resetButton:hover {
+  background-color: #eaab53;
+}
