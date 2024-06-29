@@ -1,6 +1,6 @@
 //gameboard IIFE
 const gameboard = function () {
-  const board = [];
+  let board = [];
   for (let i = 0; i < 3; i++) {
     board[i] = [];
     for (let j = 0; j < 3; j++) {
@@ -10,6 +10,16 @@ const gameboard = function () {
 
   const getBoard = () => {
     return board;
+  };
+
+  const resetBoard = () => {
+    board = [];
+    for (let i = 0; i < 3; i++) {
+      board[i] = [];
+      for (let j = 0; j < 3; j++) {
+        board[i].push(cell());
+      }
+    }
   };
 
   const showBoard = () => {
@@ -104,6 +114,7 @@ const gameboard = function () {
 
   return {
     getBoard,
+    resetBoard,
     showBoard,
     placeToken,
     checkAvailability,
@@ -134,6 +145,10 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
+  const changeToDefaultPlayer = () => {
+    activePlayer = players[0];
+  };
+
   const printNewRound = () => {
     console.log(`It's ${activePlayer.name}'s turn:`);
     board.showBoard();
@@ -156,7 +171,13 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
       printNewRound();
     }
   };
-  return { playRound, printNewRound, getActivePlayer, getBoard };
+  return {
+    playRound,
+    printNewRound,
+    getActivePlayer,
+    changeToDefaultPlayer,
+    getBoard,
+  };
 })();
 
 gameFlow.printNewRound();
@@ -187,6 +208,16 @@ const screenController = (function () {
           gameEnded = true;
         }
       }
+    });
+  });
+
+  const resetButton = document.querySelector(".resetButton");
+  resetButton.addEventListener("click", () => {
+    gameEnded = false;
+    gameFlow.getBoard().resetBoard();
+    gameFlow.changeToDefaultPlayer();
+    buttons.forEach((button) => {
+      button.textContent = "";
     });
   });
 })();
