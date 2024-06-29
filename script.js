@@ -144,10 +144,10 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
       board.placeToken(row, col, activePlayer.token);
       if (board.checkWin()) {
         console.log(`${activePlayer.name} wins.`);
-        return;
+        return "win";
       } else if (board.checkDraw()) {
         console.log("It's a tie.");
-        return;
+        return "tie";
       }
       changeActivePlayer();
       printNewRound();
@@ -156,26 +156,37 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
       printNewRound();
     }
   };
-  return { playRound, printNewRound, getActivePlayer };
+  return { playRound, printNewRound, getActivePlayer, getBoard };
 })();
 
 gameFlow.printNewRound();
 
 const screenController = (function () {
   const buttons = document.querySelectorAll(".gameboardPosition");
+  let gameEnded = false;
 
   buttons.forEach((button) => {
     button.addEventListener("click", (event) => {
       if (
-        gameFlow.playRound(
+        gameFlow
+          .getBoard()
+          .checkAvailability(
+            event.target.getAttribute("data-row"),
+            event.target.getAttribute("data-col")
+          ) &&
+        !gameEnded
+      ) {
+        event.target.textContent = gameFlow.getActivePlayer().token;
+        let result = gameFlow.playRound(
           event.target.getAttribute("data-row"),
           event.target.getAttribute("data-col")
-          //Active player is fout want ik update mijn scherm te laat.
-          //Mss logica omdraaien: vanuit gameController mijn UI functies aanroepen
-        )
-      ) {
+        );
+        if (result === "win") {
+          gameEnded = true;
+        } else if (result === "tie") {
+          gameEnded = true;
+        }
       }
-      event.target.textContent = gameFlow.getActivePlayer().token;
     });
   });
 })();
