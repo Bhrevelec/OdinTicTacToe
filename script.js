@@ -255,6 +255,7 @@ const screenController = (function () {
       gameFlow.inputPlayerName(0, "player1");
       gameFlow.inputPlayerName(1, "player2");
       checkMark.classList.toggle("hidden");
+      namesInputDone = false;
     }
   });
 })();
