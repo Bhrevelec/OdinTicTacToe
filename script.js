@@ -135,6 +135,10 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
     return board;
   };
 
+  const inputPlayerName = (position, playerName) => {
+    players[position].name = playerName;
+  };
+
   let activePlayer = players[0];
 
   const getActivePlayer = () => {
@@ -174,6 +178,7 @@ const gameFlow = (function (player1 = "Mario", player2 = "Luigi") {
   return {
     playRound,
     printNewRound,
+    inputPlayerName,
     getActivePlayer,
     changeToDefaultPlayer,
     getBoard,
@@ -185,7 +190,23 @@ gameFlow.printNewRound();
 const screenController = (function () {
   const buttons = document.querySelectorAll(".gameboardPosition");
   let gameEnded = false;
+  let namesInputDone = false;
   const resultBanner = document.querySelector(".resultBanner");
+
+  const inputPlayer1 = document.querySelector("#inputPlayer1");
+  const inputPlayer2 = document.querySelector("#inputPlayer2");
+  const inputButton = document.querySelector("#inputButton");
+  const checkMark = document.querySelector("svg");
+  inputButton.addEventListener("click", () => {
+    if (inputPlayer1.value !== "" && inputPlayer2.value !== "") {
+      gameFlow.inputPlayerName(0, inputPlayer1.value);
+      gameFlow.inputPlayerName(1, inputPlayer2.value);
+      if (!namesInputDone) {
+        checkMark.classList.toggle("hidden");
+      }
+      namesInputDone = true;
+    }
+  });
 
   buttons.forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -205,8 +226,8 @@ const screenController = (function () {
         );
         if (result === "win") {
           gameEnded = true;
-          resultBanner.innerHTML = `Player ${
-            gameFlow.getActivePlayer().token
+          resultBanner.innerHTML = `${
+            gameFlow.getActivePlayer().name
           } wins the game! <br>Push the reset button to restart.`;
           resultBanner.classList.toggle("hidden");
         } else if (result === "tie") {
@@ -226,7 +247,14 @@ const screenController = (function () {
     buttons.forEach((button) => {
       button.textContent = "";
     });
-    resultBanner.innerHTML = "";
-    resultBanner.classList.toggle("hidden");
+    if (!resultBanner.classList.contains("hidden")) {
+      resultBanner.innerHTML = "";
+      resultBanner.classList.toggle("hidden");
+    }
+    if (!checkMark.classList.contains("hidden")) {
+      gameFlow.inputPlayerName(0, "player1");
+      gameFlow.inputPlayerName(1, "player2");
+      checkMark.classList.toggle("hidden");
+    }
   });
 })();
