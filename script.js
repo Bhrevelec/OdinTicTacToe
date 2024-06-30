@@ -185,6 +185,7 @@ gameFlow.printNewRound();
 const screenController = (function () {
   const buttons = document.querySelectorAll(".gameboardPosition");
   let gameEnded = false;
+  const resultBanner = document.querySelector(".resultBanner");
 
   buttons.forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -204,8 +205,14 @@ const screenController = (function () {
         );
         if (result === "win") {
           gameEnded = true;
+          resultBanner.innerHTML = `Player ${
+            gameFlow.getActivePlayer().token
+          } wins the game! <br>Push the reset button to restart.`;
+          resultBanner.classList.toggle("hidden");
         } else if (result === "tie") {
           gameEnded = true;
+          resultBanner.innerHTML = `It's a tie! <br>Push the reset button to restart.`;
+          resultBanner.classList.toggle("hidden");
         }
       }
     });
@@ -219,5 +226,7 @@ const screenController = (function () {
     buttons.forEach((button) => {
       button.textContent = "";
     });
+    resultBanner.innerHTML = "";
+    resultBanner.classList.toggle("hidden");
   });
 })();
