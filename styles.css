@@ -48,3 +48,18 @@ h1 {
 .resetButton:hover {
   background-color: #eaab53;
 }
+
+.hidden {
+  display: none;
+}
+
+.resultBanner {
+  padding: 10px;
+  background-color: #ced9d7;
+  border-radius: 5px;
+  border: 2px solid #054e5a;
+  position: absolute;
+  top: 20%;
+  left: 3%;
+  font-family: Tahoma;
+}
